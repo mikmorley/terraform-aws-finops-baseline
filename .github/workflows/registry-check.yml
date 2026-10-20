@@ -1,0 +1,55 @@
+name: registry-check
+
+# Runs `terraform init` on each example as users get it from the Terraform Registry, not from
+# this checkout. A failure means the latest release cannot be downloaded or its providers
+# cannot be installed. Run it by hand from the Actions tab, for example after a release.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: registry-check
+  cancel-in-progress: false
+
+# Runs on the self-hosted runner (Linux, X64). It has to have curl and tar.
+jobs:
+  init:
+    runs-on: self-hosted
+    timeout-minutes: 20
+    steps:
+      - uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_wrapper: false # the runner's system Node is too old for the wrapper
+      # Same disk handling as ci.yml: one provider download shared by both examples, and
+      # unpacking in the job's temp directory instead of /tmp.
+      - name: Share one provider download between directories
+        run: |
+          mkdir -p "$RUNNER_TEMP/tf-plugin-cache" "$RUNNER_TEMP/tmp"
+          echo "TF_PLUGIN_CACHE_DIR=$RUNNER_TEMP/tf-plugin-cache" >> "$GITHUB_ENV"
+          echo "TMPDIR=$RUNNER_TEMP/tmp" >> "$GITHUB_ENV"
+          rm -f /tmp/terraform-provider* || true
+      # No checkout: the point is to use only what the Registry serves.
+      - name: Init examples/basic from the Registry
+        if: ${{ !cancelled() }}
+        run: |
+          dir="$RUNNER_TEMP/registry-check/basic"
+          mkdir -p "$dir"
+          cat > "$dir/main.tf" <<'HCL'
+          module "example" {
+            source = "mikmorley/finops-baseline/aws//examples/basic"
+          }
+          HCL
+          terraform -chdir="$dir" init -backend=false -input=false
+      - name: Init examples/complete from the Registry
+        if: ${{ !cancelled() }}
+        run: |
+          dir="$RUNNER_TEMP/registry-check/complete"
+          mkdir -p "$dir"
+          cat > "$dir/main.tf" <<'HCL'
+          module "example" {
+            source = "mikmorley/finops-baseline/aws//examples/complete"
+          }
+          HCL
+          terraform -chdir="$dir" init -backend=false -input=false
