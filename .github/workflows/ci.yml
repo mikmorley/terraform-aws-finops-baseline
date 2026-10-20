@@ -36,9 +36,17 @@ jobs:
           tflint --init
           tflint --recursive
       - name: Terraform tests
+        # One process per test file. A single `terraform test` for all files was killed
+        # (exit 137, out of memory) on the self-hosted runner.
         run: |
+          free -m || true
           terraform init -backend=false -input=false
-          terraform test
+          status=0
+          for file in tests/*.tftest.hcl; do
+            echo "==> $file"
+            terraform test -filter="$file" || status=1
+          done
+          exit "$status"
 
   python:
     runs-on: self-hosted
