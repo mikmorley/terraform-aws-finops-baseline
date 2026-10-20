@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/mikmorley/terraform-aws-finops-baseline/compare/v0.5.0...v0.6.0) (2026-10-20)
+
+
+### Features
+
+* **budgets:** add opt-in budget actions (M6) ([#13](https://github.com/mikmorley/terraform-aws-finops-baseline/issues/13)) ([6e43ae1](https://github.com/mikmorley/terraform-aws-finops-baseline/commit/6e43ae1fa01a38bace090ec74764438a265f098f))
+
 ## [0.5.0](https://github.com/mikmorley/terraform-aws-finops-baseline/compare/v0.4.0...v0.5.0) (2026-10-20)
 
 
