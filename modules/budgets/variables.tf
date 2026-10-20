@@ -31,11 +31,28 @@ variable "account_budget" {
     - `alert_thresholds`: alert when actual spend passes each of these percentages of the limit.
     - `forecast_thresholds`: alert when forecast spend passes each of these percentages of the limit. AWS needs some spend history before it can forecast, so a new account may get no forecast alert at first.
     Each percentage is between 1 and 1000 and appears once per list. AWS allows at most 10 alerts per budget.
+    - `actions`: opt-in responses to this budget, keyed by a name you choose. Off by default. Each action has:
+      - `type`: `deny_policy` attaches a deny policy to `roles`. `stop_ec2` and `stop_rds` stop the `instance_ids` you list. `stop_tagged` stops every resource carrying the scheduler's tag.
+      - `threshold_percent` and `notification_type` (`ACTUAL` or `FORECASTED`): when the action fires.
+      - `approval_model`: `AUTOMATIC` (default) or `MANUAL`. `stop_tagged` has no approval step and must stay `AUTOMATIC`.
+      - `roles` and `policy_arn` (`deny_policy` only): the IAM role names to restrict, and an existing deny policy. Without `policy_arn` the module creates one from `deny_policy_actions`.
+      - `instance_ids` and `region` (`stop_ec2` and `stop_rds`): EC2 instance IDs or RDS instance identifiers, in `region` (default: the provider region).
+      Every action except `stop_tagged` is a native AWS action. The first two budgets with native actions are free in the account. Each further one costs about US$0.10 a day (about US$3 a month), however many actions it has.
   EOT
   type = object({
     limit_usd           = number
     alert_thresholds    = optional(list(number), [50, 80, 100])
     forecast_thresholds = optional(list(number), [100])
+    actions = optional(map(object({
+      type              = string
+      threshold_percent = number
+      notification_type = optional(string, "ACTUAL")
+      approval_model    = optional(string, "AUTOMATIC")
+      roles             = optional(list(string), [])
+      policy_arn        = optional(string)
+      instance_ids      = optional(list(string), [])
+      region            = optional(string)
+    })), {})
   })
 
   validation {
@@ -68,7 +85,7 @@ variable "tag_budgets" {
   description = <<-EOT
     Extra monthly budgets that cover only resources with a given tag. The map key becomes part of the budget name, for example `env-dev` gives `finops-tag-env-dev`.
     - `tag_key` and `tag_value`: the tag to match. Write the key without the `user:` prefix, the module adds it.
-    - `limit_usd`, `alert_thresholds`, `forecast_thresholds`: same meaning and rules as in `account_budget`.
+    - `limit_usd`, `alert_thresholds`, `forecast_thresholds`, `actions`: same meaning and rules as in `account_budget`.
     The tag key must be activated as a cost allocation tag first, and it only matches costs billed after activation. Until then the budget shows no spend. The cost-allocation-tags module activates keys for you.
   EOT
   type = map(object({
@@ -77,6 +94,16 @@ variable "tag_budgets" {
     limit_usd           = number
     alert_thresholds    = optional(list(number), [50, 80, 100])
     forecast_thresholds = optional(list(number), [100])
+    actions = optional(map(object({
+      type              = string
+      threshold_percent = number
+      notification_type = optional(string, "ACTUAL")
+      approval_model    = optional(string, "AUTOMATIC")
+      roles             = optional(list(string), [])
+      policy_arn        = optional(string)
+      instance_ids      = optional(list(string), [])
+      region            = optional(string)
+    })), {})
   }))
   default = {}
 
@@ -125,7 +152,7 @@ variable "service_budgets" {
   description = <<-EOT
     Extra monthly budgets that cover one AWS service. The map key becomes part of the budget name, for example `ec2` gives `finops-service-ec2`.
     - `service`: the service name exactly as Cost Explorer shows it, for example `Amazon Elastic Compute Cloud - Compute`.
-    - `limit_usd`, `alert_thresholds`, `forecast_thresholds`: same meaning and rules as in `account_budget`.
+    - `limit_usd`, `alert_thresholds`, `forecast_thresholds`, `actions`: same meaning and rules as in `account_budget`.
     AWS matches the name as written and does not reject a wrong one, so a typo gives a budget that never sees any spend.
   EOT
   type = map(object({
@@ -133,6 +160,16 @@ variable "service_budgets" {
     limit_usd           = number
     alert_thresholds    = optional(list(number), [50, 80, 100])
     forecast_thresholds = optional(list(number), [100])
+    actions = optional(map(object({
+      type              = string
+      threshold_percent = number
+      notification_type = optional(string, "ACTUAL")
+      approval_model    = optional(string, "AUTOMATIC")
+      roles             = optional(list(string), [])
+      policy_arn        = optional(string)
+      instance_ids      = optional(list(string), [])
+      region            = optional(string)
+    })), {})
   }))
   default = {}
 
@@ -171,5 +208,23 @@ variable "service_budgets" {
       for _, b in var.service_budgets : length(b.alert_thresholds) + length(b.forecast_thresholds) >= 1 && length(b.alert_thresholds) + length(b.forecast_thresholds) <= 10
     ])
     error_message = "Each entry in service_budgets needs between 1 and 10 alerts in total (alert_thresholds plus forecast_thresholds)."
+  }
+}
+
+variable "deny_policy_actions" {
+  description = "IAM actions the module-created deny policy blocks. It only exists when a `deny_policy` action has no `policy_arn`. The default stops the roles you list from launching or starting EC2 and RDS resources. A role that runs the scheduler Lambda should not be in the list, or the start run fails."
+  type        = list(string)
+  default = [
+    "ec2:RunInstances",
+    "ec2:StartInstances",
+    "rds:CreateDBInstance",
+    "rds:CreateDBCluster",
+    "rds:StartDBInstance",
+    "rds:StartDBCluster",
+  ]
+
+  validation {
+    condition     = length(var.deny_policy_actions) > 0 && alltrue([for a in var.deny_policy_actions : can(regex("^[a-zA-Z0-9-]+:[a-zA-Z0-9*?]+$", a))])
+    error_message = "deny_policy_actions must list at least one IAM action, such as ec2:RunInstances."
   }
 }
