@@ -12,9 +12,10 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+# Runners are pinned to ubuntu-24.04 so the ubuntu-latest move to Ubuntu 26 does not change CI.
 jobs:
   terraform:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
       - uses: hashicorp/setup-terraform@v4
@@ -37,7 +38,7 @@ jobs:
           terraform test
 
   python:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
@@ -53,7 +54,7 @@ jobs:
         run: pytest
 
   checkov:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
@@ -66,7 +67,7 @@ jobs:
         run: checkov -d . --framework terraform --quiet --compact
 
   docs:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
       # The terraform-docs/gh-actions image bundles an older terraform-docs whose
