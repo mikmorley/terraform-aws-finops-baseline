@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/mikmorley/terraform-aws-finops-baseline/compare/v0.3.0...v0.4.0) (2026-10-20)
+
+
+### Features
+
+* **cost-allocation-tags:** add cost allocation tags submodule (M4) ([#9](https://github.com/mikmorley/terraform-aws-finops-baseline/issues/9)) ([614adf3](https://github.com/mikmorley/terraform-aws-finops-baseline/commit/614adf3f210bcee9bd1f1df43e944a5367fd9c43))
+
 ## [0.3.0](https://github.com/mikmorley/terraform-aws-finops-baseline/compare/v0.2.0...v0.3.0) (2026-10-20)
 
 
