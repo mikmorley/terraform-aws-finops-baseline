@@ -2,6 +2,11 @@
 
 Terraform module that gives a single AWS account a FinOps baseline: budgets, cost anomaly alerts, a tag-based dev scheduler, weekly cost reports and opt-in budget actions, with Slack and email alerts.
 
+[![ci](https://github.com/mikmorley/terraform-aws-finops-baseline/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/mikmorley/terraform-aws-finops-baseline/actions/workflows/ci.yml)
+[![release](https://github.com/mikmorley/terraform-aws-finops-baseline/actions/workflows/release.yml/badge.svg?branch=main)](https://github.com/mikmorley/terraform-aws-finops-baseline/actions/workflows/release.yml)
+
+[Terraform Registry](https://registry.terraform.io/modules/mikmorley/finops-baseline/aws/latest) | [Changelog](CHANGELOG.md)
+
 > **Status:** pre-1.0. The interface can change between minor releases. Read [Limitations and gotchas](#limitations-and-gotchas) before you rely on it.
 
 ## What it does
