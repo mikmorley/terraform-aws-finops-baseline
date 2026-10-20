@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/mikmorley/terraform-aws-finops-baseline/compare/v0.2.0...v0.3.0) (2026-10-20)
+
+
+### Features
+
+* **anomaly-detection:** add anomaly detection submodule (M3) ([#6](https://github.com/mikmorley/terraform-aws-finops-baseline/issues/6)) ([86b6fff](https://github.com/mikmorley/terraform-aws-finops-baseline/commit/86b6fff58e6b966bf743b93d3e0859ac13ba03f5))
+
 ## [0.2.0](https://github.com/mikmorley/terraform-aws-finops-baseline/compare/v0.1.0...v0.2.0) (2026-10-20)
 
 
