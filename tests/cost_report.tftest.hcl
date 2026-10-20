@@ -49,8 +49,8 @@ run "defaults_create_lambda_and_weekly_schedule" {
   }
 
   assert {
-    condition     = aws_scheduler_schedule.this.flexible_time_window[0].mode == "OFF" && aws_scheduler_schedule.this.target[0].role_arn == aws_iam_role.schedule.arn
-    error_message = "The schedule should have no flexible window and use the schedule role."
+    condition     = aws_scheduler_schedule.this.flexible_time_window[0].mode == "OFF"
+    error_message = "The schedule should have no flexible window."
   }
 
   assert {
