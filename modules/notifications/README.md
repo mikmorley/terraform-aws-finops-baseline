@@ -65,7 +65,7 @@ Publishers that want a readable email should send the SNS `json` message structu
 
 `cost_report` fields: `period`, `month_to_date_usd`, `budget_limit_usd`, `forecast_usd` (may be null), `top_services` (list of `service`, `amount_usd`), `biggest_change` (`service`, `change_usd`, `change_pct`) and `anomalies` (list of `service`, `impact_usd`). Every field is optional.
 
-`scheduler_summary` fields: `action`, `dry_run`, `counts` (`stopped`, `started`, `skipped`, `failed`) and `details` (list of `resource`, `type`, `outcome`, `reason`).
+`scheduler_summary` fields: `action`, `dry_run`, `counts` (`stopped`, `started`, `skipped`, `failed`) and `details` (list of `resource`, `type`, `outcome`, `reason`). The scheduler also sends `trigger` (`schedule` or `budget`) and `details_omitted`, which the notifier ignores.
 
 ## Encryption
 
