@@ -2,6 +2,8 @@
 
 Terraform module that gives a single AWS account a FinOps baseline: budgets, cost anomaly alerts, a tag-based dev scheduler, weekly cost reports and opt-in budget actions, with Slack and email alerts.
 
+[Terraform Registry](https://registry.terraform.io/modules/mikmorley/finops-baseline/aws/latest) | [Changelog](CHANGELOG.md)
+
 > **Status:** pre-1.0. The interface can change between minor releases. Read [Limitations and gotchas](#limitations-and-gotchas) before you rely on it.
 
 ## What it does
@@ -39,7 +41,8 @@ The root module wires standalone submodules. You can use any of them on their ow
 
 ```hcl
 module "finops" {
-  source = "mikmorley/finops-baseline/aws"
+  source  = "mikmorley/finops-baseline/aws"
+  version = "~> 0.8.0"
 
   notifications = {
     emails = ["ops@example.com"]
@@ -50,6 +53,8 @@ module "finops" {
   }
 }
 ```
+
+The `~> 0.8.0` constraint accepts patch releases of 0.8 only. Before 1.0 the interface can change between minor releases, so move to a new minor version on purpose and read the [changelog](CHANGELOG.md) first.
 
 This gives you a US$100 monthly budget with alerts at 50%, 80% and 100% of actual spend and 100% of forecast, cost anomaly alerts for US$10 and 20%, and a weekly cost report on Mondays at 09:00 UTC. The full example is in [`examples/basic`](examples/basic).
 
@@ -105,7 +110,7 @@ account_budget = {
 
 ## Submodules
 
-Each submodule has its own README and works without the root module:
+Each submodule has its own README and works without the root module. Pass the same `version` constraint as for the root module:
 
 | Submodule | Source |
 |---|---|

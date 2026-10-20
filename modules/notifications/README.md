@@ -6,7 +6,8 @@ The module works on its own:
 
 ```hcl
 module "notifications" {
-  source = "mikmorley/finops-baseline/aws//modules/notifications"
+  source  = "mikmorley/finops-baseline/aws//modules/notifications"
+  version = "~> 0.8.0"
 
   name_prefix = "finops"
   emails      = ["ops@example.com"]

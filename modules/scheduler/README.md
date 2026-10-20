@@ -4,7 +4,8 @@ Stops and starts dev resources outside working hours. Tag an EC2 instance, RDS i
 
 ```hcl
 module "scheduler" {
-  source = "mikmorley/finops-baseline/aws//modules/scheduler"
+  source  = "mikmorley/finops-baseline/aws//modules/scheduler"
+  version = "~> 0.8.0"
 
   name_prefix   = "finops"
   sns_topic_arn = module.notifications.topic_arn

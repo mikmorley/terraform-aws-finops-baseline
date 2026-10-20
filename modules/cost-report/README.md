@@ -4,7 +4,8 @@ A weekly AWS cost report. A Lambda reads Cost Explorer once a week and publishes
 
 ```hcl
 module "cost_report" {
-  source = "mikmorley/finops-baseline/aws//modules/cost-report"
+  source  = "mikmorley/finops-baseline/aws//modules/cost-report"
+  version = "~> 0.8.0"
 
   name_prefix   = "finops"
   sns_topic_arn = module.notifications.topic_arn

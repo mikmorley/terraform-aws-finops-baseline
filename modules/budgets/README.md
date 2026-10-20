@@ -6,7 +6,8 @@ Actions are opt-in and off by default. A budget can also deny new spend, stop re
 
 ```hcl
 module "budgets" {
-  source = "mikmorley/finops-baseline/aws//modules/budgets"
+  source  = "mikmorley/finops-baseline/aws//modules/budgets"
+  version = "~> 0.8.0"
 
   name_prefix   = "finops"
   sns_topic_arn = module.notifications.topic_arn
