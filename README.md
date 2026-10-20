@@ -240,6 +240,15 @@ This module does not replace them if you need only one piece. It bundles the pie
 
 See [CONTRIBUTING.md](CONTRIBUTING.md).
 
+## Author
+
+Created and maintained by [Michael Morley](https://morley.cloud), Platform and DevOps Engineer in Australia.
+
+- Website: [morley.cloud](https://morley.cloud)
+- LinkedIn: [michaelmorleyau](https://www.linkedin.com/in/michaelmorleyau)
+
+Bug reports and ideas go in the GitHub issues.
+
 ## Licence
 
 Apache 2.0. See [LICENSE](LICENSE).

@@ -128,3 +128,5 @@ No modules.
 | <a name="output_subscription_arn"></a> [subscription\_arn](#output\_subscription\_arn) | ARN of the anomaly subscription that publishes to the SNS topic. |
 | <a name="output_tag_monitor_arns"></a> [tag\_monitor\_arns](#output\_tag\_monitor\_arns) | ARNs of the tag monitors, keyed by the keys of `tag_monitors`. |
 <!-- END_TF_DOCS -->
+
+Part of [terraform-aws-finops-baseline](https://github.com/mikmorley/terraform-aws-finops-baseline) by [Michael Morley](https://morley.cloud).

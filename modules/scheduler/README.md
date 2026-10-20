@@ -172,3 +172,5 @@ No modules.
 | <a name="output_log_group_name"></a> [log\_group\_name](#output\_log\_group\_name) | Name of the CloudWatch log group of the scheduler Lambda. |
 | <a name="output_schedule_names"></a> [schedule\_names](#output\_schedule\_names) | Names of the two EventBridge schedules, keyed by `stop` and `start`. |
 <!-- END_TF_DOCS -->
+
+Part of [terraform-aws-finops-baseline](https://github.com/mikmorley/terraform-aws-finops-baseline) by [Michael Morley](https://morley.cloud).

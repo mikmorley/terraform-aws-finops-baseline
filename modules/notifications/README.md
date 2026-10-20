@@ -157,3 +157,5 @@ No modules.
 | <a name="output_topic_arn"></a> [topic\_arn](#output\_topic\_arn) | ARN of the SNS topic that receives every alert and report. |
 | <a name="output_topic_name"></a> [topic\_name](#output\_topic\_name) | Name of the SNS topic. |
 <!-- END_TF_DOCS -->
+
+Part of [terraform-aws-finops-baseline](https://github.com/mikmorley/terraform-aws-finops-baseline) by [Michael Morley](https://morley.cloud).

@@ -81,3 +81,5 @@ No modules.
 | ---- | ----------- |
 | <a name="output_active_tag_keys"></a> [active\_tag\_keys](#output\_active\_tag\_keys) | Tag keys this module activates as cost allocation tags. |
 <!-- END_TF_DOCS -->
+
+Part of [terraform-aws-finops-baseline](https://github.com/mikmorley/terraform-aws-finops-baseline) by [Michael Morley](https://morley.cloud).

@@ -209,3 +209,5 @@ No modules.
 | <a name="output_stop_topic_arn"></a> [stop\_topic\_arn](#output\_stop\_topic\_arn) | ARN of the SNS topic that `stop_tagged` actions notify, or null when there are none. Pass it to the scheduler module as `budget_stop_topic_arn`. |
 | <a name="output_tag_budget_names"></a> [tag\_budget\_names](#output\_tag\_budget\_names) | Names of the tag budgets, keyed by the keys of `tag_budgets`. |
 <!-- END_TF_DOCS -->
+
+Part of [terraform-aws-finops-baseline](https://github.com/mikmorley/terraform-aws-finops-baseline) by [Michael Morley](https://morley.cloud).
