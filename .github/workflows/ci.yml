@@ -50,9 +50,7 @@ jobs:
       - name: Ruff format
         run: ruff format --check .
       - name: Pytest
-        # Exit code 5 means "no tests collected". Allowed until the first Lambda
-        # lands in M1, then this should become a plain `pytest`.
-        run: pytest || [ $? -eq 5 ]
+        run: pytest
 
   checkov:
     runs-on: ubuntu-latest
