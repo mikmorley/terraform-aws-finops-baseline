@@ -21,6 +21,9 @@ jobs:
       - uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: "1.7.5" # oldest supported; module claims >= 1.7
+          # The wrapper is a Node script run with the first `node` on PATH. The self-hosted
+          # runner's system Node is too old for it, and nothing here reads its outputs.
+          terraform_wrapper: false
       - name: Format
         run: terraform fmt -check -recursive
       - name: Init and validate (root, modules, examples)
