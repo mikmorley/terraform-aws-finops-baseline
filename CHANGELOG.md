@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/mikmorley/terraform-aws-finops-baseline/compare/v0.4.0...v0.5.0) (2026-10-20)
+
+
+### Features
+
+* **scheduler:** add scheduler submodule and Lambda (M5) ([#11](https://github.com/mikmorley/terraform-aws-finops-baseline/issues/11)) ([70fcfc1](https://github.com/mikmorley/terraform-aws-finops-baseline/commit/70fcfc1c98f7c0232a620e5e9daa91f69e1bb783))
+
 ## [0.4.0](https://github.com/mikmorley/terraform-aws-finops-baseline/compare/v0.3.0...v0.4.0) (2026-10-20)
 
 
