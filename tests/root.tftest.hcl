@@ -117,7 +117,7 @@ run "every_feature_on" {
   }
 
   assert {
-    condition     = output.scheduler_schedule_names == { stop = "acme-scheduler-stop", start = "acme-scheduler-start" } && output.scheduler_function_name == "acme-scheduler"
+    condition     = output.scheduler_schedule_names["stop"] == "acme-scheduler-stop" && output.scheduler_schedule_names["start"] == "acme-scheduler-start" && output.scheduler_function_name == "acme-scheduler"
     error_message = "The scheduler outputs should carry the prefix."
   }
 
