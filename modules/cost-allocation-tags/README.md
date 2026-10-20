@@ -4,8 +4,7 @@ Activates your tag keys as cost allocation tags. Tag budgets and tag-based anoma
 
 ```hcl
 module "cost_allocation_tags" {
-  source  = "mikmorley/finops-baseline/aws//modules/cost-allocation-tags"
-  version = "~> 0.8.0"
+  source = "mikmorley/finops-baseline/aws//modules/cost-allocation-tags"
 
   tag_keys = ["Environment", "Project"]
 }

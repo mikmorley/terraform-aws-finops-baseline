@@ -4,8 +4,7 @@ AWS Cost Anomaly Detection with noise control. The module creates monitors and o
 
 ```hcl
 module "anomaly_detection" {
-  source  = "mikmorley/finops-baseline/aws//modules/anomaly-detection"
-  version = "~> 0.8.0"
+  source = "mikmorley/finops-baseline/aws//modules/anomaly-detection"
 
   name_prefix   = "finops"
   sns_topic_arn = module.notifications.topic_arn
