@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0](https://github.com/mikmorley/terraform-aws-finops-baseline/compare/v0.6.0...v0.7.0) (2026-10-20)
+
+
+### Features
+
+* **cost-report:** add cost report submodule and Lambda (M7) ([#15](https://github.com/mikmorley/terraform-aws-finops-baseline/issues/15)) ([7ffbc4e](https://github.com/mikmorley/terraform-aws-finops-baseline/commit/7ffbc4e401e1027c23e42277c26c177169875899))
+
 ## [0.6.0](https://github.com/mikmorley/terraform-aws-finops-baseline/compare/v0.5.0...v0.6.0) (2026-10-20)
 
 
