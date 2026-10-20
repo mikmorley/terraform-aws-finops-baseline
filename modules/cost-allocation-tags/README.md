@@ -4,7 +4,7 @@ Activates your tag keys as cost allocation tags. Tag budgets and tag-based anoma
 
 ```hcl
 module "cost_allocation_tags" {
-  source = "<owner>/finops-baseline/aws//modules/cost-allocation-tags"
+  source = "mikmorley/finops-baseline/aws//modules/cost-allocation-tags"
 
   tag_keys = ["Environment", "Project"]
 }
@@ -34,7 +34,7 @@ The module has no provider block and does not set the per-resource `region` argu
 
 ```hcl
 module "cost_allocation_tags" {
-  source    = "<owner>/finops-baseline/aws//modules/cost-allocation-tags"
+  source    = "mikmorley/finops-baseline/aws//modules/cost-allocation-tags"
   providers = { aws = aws.us_east_1 }
   # ...
 }

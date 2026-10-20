@@ -6,7 +6,7 @@ Actions are opt-in and off by default. A budget can also deny new spend, stop re
 
 ```hcl
 module "budgets" {
-  source = "<owner>/finops-baseline/aws//modules/budgets"
+  source = "mikmorley/finops-baseline/aws//modules/budgets"
 
   name_prefix   = "finops"
   sns_topic_arn = module.notifications.topic_arn
@@ -109,7 +109,7 @@ Give role names, not ARNs. Do not list the scheduler's role, because the deny po
 
 ### Stop by tag
 
-`stop_tagged` creates an SNS topic, `<name_prefix>-budget-stop`, and adds a budget notification at the threshold that publishes to it. Pass the `stop_topic_arn` output to the scheduler module as `budget_stop_topic_arn`. The scheduler Lambda then stops everything that carries its schedule tag, found at that moment, so new and replaced resources are covered.
+`stop_tagged` creates an SNS topic, `<name_prefix>-budget-stop`, and adds a budget notification at the threshold that publishes to it. Pass the `stop_topic_arn` output to the scheduler module as `budget_stop_topic_arn`, and set `budget_stop_enabled = true` there. The scheduler Lambda then stops everything that carries its schedule tag, found at that moment, so new and replaced resources are covered.
 
 The tag comes from the scheduler module (`tag_key` and `tag_value`), not from this module. Without a scheduler subscribed to the topic, a `stop_tagged` action does nothing.
 
@@ -135,7 +135,7 @@ The module has no provider block and does not set the per-resource `region` argu
 
 ```hcl
 module "budgets" {
-  source    = "<owner>/finops-baseline/aws//modules/budgets"
+  source    = "mikmorley/finops-baseline/aws//modules/budgets"
   providers = { aws = aws.us_east_1 }
   # ...
 }

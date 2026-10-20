@@ -6,7 +6,7 @@ The module works on its own:
 
 ```hcl
 module "notifications" {
-  source = "<owner>/finops-baseline/aws//modules/notifications"
+  source = "mikmorley/finops-baseline/aws//modules/notifications"
 
   name_prefix = "finops"
   emails      = ["ops@example.com"]
@@ -82,7 +82,7 @@ The module has no provider block and does not set the per-resource `region` argu
 
 ```hcl
 module "notifications" {
-  source    = "<owner>/finops-baseline/aws//modules/notifications"
+  source    = "mikmorley/finops-baseline/aws//modules/notifications"
   providers = { aws = aws.us_east_1 }
   # ...
 }

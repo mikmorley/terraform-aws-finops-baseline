@@ -4,7 +4,7 @@ Stops and starts dev resources outside working hours. Tag an EC2 instance, RDS i
 
 ```hcl
 module "scheduler" {
-  source = "<owner>/finops-baseline/aws//modules/scheduler"
+  source = "mikmorley/finops-baseline/aws//modules/scheduler"
 
   name_prefix   = "finops"
   sns_topic_arn = module.notifications.topic_arn
@@ -31,7 +31,7 @@ Start with `dry_run = true`. Every run then reports what it would stop or start 
 |---|---|
 | Lambda `<name_prefix>-scheduler`, its IAM role and CloudWatch log group | Finds tagged resources and stops or starts them |
 | EventBridge schedules `<name_prefix>-scheduler-stop` and `-start`, and an IAM role for them | Invoke the Lambda in `timezone` |
-| Lambda permission and SNS subscription | Only when `budget_stop_topic_arn` is set |
+| Lambda permission and SNS subscription | Only when `budget_stop_enabled` is true |
 
 The Lambda uses Python 3.13 on arm64 with only the standard library and boto3. Terraform packages it with no build step. It times out after 5 minutes.
 
@@ -71,7 +71,7 @@ A resource type you leave out of `resource_types` gets no permissions at all.
 
 ## Stopping from a budget
 
-Set `budget_stop_topic_arn` to an SNS topic and the Lambda subscribes to it. Any message on that topic runs a stop. The budgets module creates such a topic for its `stop_tagged` actions. Pass its `stop_topic_arn` output here, and the tagged resources stop when the budget passes the action's threshold.
+Set `budget_stop_enabled = true` and `budget_stop_topic_arn` to an SNS topic and the Lambda subscribes to it. Any message on that topic runs a stop. The budgets module creates such a topic for its `stop_tagged` actions. Pass its `stop_topic_arn` output here, and the tagged resources stop when the budget passes the action's threshold.
 
 There is no approval step on this path. The Lambda stops everything with the tag as soon as the message arrives. Budget alerts run hours behind real spend, so this is a brake and not a hard limit. `dry_run` applies to this path too.
 
@@ -87,7 +87,7 @@ The Lambda only sees EC2 and RDS resources in the region it runs in. For another
 
 ```hcl
 module "scheduler_sydney" {
-  source    = "<owner>/finops-baseline/aws//modules/scheduler"
+  source    = "mikmorley/finops-baseline/aws//modules/scheduler"
   providers = { aws = aws.sydney }
   # ...
 }
@@ -146,7 +146,8 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 | ---- | ----------- | ---- | ------- | :------: |
-| <a name="input_budget_stop_topic_arn"></a> [budget\_stop\_topic\_arn](#input\_budget\_stop\_topic\_arn) | ARN of an SNS topic whose messages stop the tagged resources, for example a topic a budget notifies when it passes a threshold. The Lambda treats any message as a stop. There is no approval step on this path. Leave null to turn it off. | `string` | `null` | no |
+| <a name="input_budget_stop_enabled"></a> [budget\_stop\_enabled](#input\_budget\_stop\_enabled) | Subscribe the Lambda to `budget_stop_topic_arn`, so any message on that topic stops the tagged resources. This is a separate switch because Terraform cannot use the ARN of a topic created in the same apply to decide whether to create resources. Set it to true together with `budget_stop_topic_arn`. | `bool` | `false` | no |
+| <a name="input_budget_stop_topic_arn"></a> [budget\_stop\_topic\_arn](#input\_budget\_stop\_topic\_arn) | ARN of the SNS topic whose messages stop the tagged resources, for example the `stop_topic_arn` output of the budgets module. The Lambda treats any message as a stop. There is no approval step on this path. Used only when `budget_stop_enabled` is true. | `string` | `null` | no |
 | <a name="input_dry_run"></a> [dry\_run](#input\_dry\_run) | When true, every run only logs and reports what it would do, and changes nothing. It also applies to stops triggered by `budget_stop_topic_arn`. | `bool` | `false` | no |
 | <a name="input_log_level"></a> [log\_level](#input\_log\_level) | Log level of the scheduler Lambda. | `string` | `"INFO"` | no |
 | <a name="input_log_retention_days"></a> [log\_retention\_days](#input\_log\_retention\_days) | Days to keep the scheduler Lambda logs in CloudWatch. | `number` | `30` | no |

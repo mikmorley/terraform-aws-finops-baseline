@@ -227,6 +227,7 @@ run "budget_stop_topic_subscribes_the_lambda" {
   }
 
   variables {
+    budget_stop_enabled   = true
     budget_stop_topic_arn = "arn:aws:sns:us-east-1:123456789012:finops-budget-stop"
   }
 
@@ -337,6 +338,37 @@ run "rejects_bad_topic_arn" {
   }
 
   expect_failures = [var.sns_topic_arn]
+}
+
+run "rejects_budget_stop_without_a_topic" {
+  command = plan
+
+  module {
+    source = "./modules/scheduler"
+  }
+
+  variables {
+    budget_stop_enabled = true
+  }
+
+  expect_failures = [aws_lambda_permission.budget_stop]
+}
+
+run "ignores_budget_stop_topic_when_not_enabled" {
+  command = plan
+
+  module {
+    source = "./modules/scheduler"
+  }
+
+  variables {
+    budget_stop_topic_arn = "arn:aws:sns:us-east-1:123456789012:finops-budget-stop"
+  }
+
+  assert {
+    condition     = length(aws_lambda_permission.budget_stop) == 0 && length(aws_sns_topic_subscription.budget_stop) == 0
+    error_message = "A topic ARN alone should not create the budget stop path."
+  }
 }
 
 run "rejects_bad_budget_stop_topic_arn" {

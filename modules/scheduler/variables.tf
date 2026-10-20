@@ -112,8 +112,14 @@ variable "dry_run" {
   default     = false
 }
 
+variable "budget_stop_enabled" {
+  description = "Subscribe the Lambda to `budget_stop_topic_arn`, so any message on that topic stops the tagged resources. This is a separate switch because Terraform cannot use the ARN of a topic created in the same apply to decide whether to create resources. Set it to true together with `budget_stop_topic_arn`."
+  type        = bool
+  default     = false
+}
+
 variable "budget_stop_topic_arn" {
-  description = "ARN of an SNS topic whose messages stop the tagged resources, for example a topic a budget notifies when it passes a threshold. The Lambda treats any message as a stop. There is no approval step on this path. Leave null to turn it off."
+  description = "ARN of the SNS topic whose messages stop the tagged resources, for example the `stop_topic_arn` output of the budgets module. The Lambda treats any message as a stop. There is no approval step on this path. Used only when `budget_stop_enabled` is true."
   type        = string
   default     = null
 

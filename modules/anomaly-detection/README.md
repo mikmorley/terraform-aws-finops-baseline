@@ -4,7 +4,7 @@ AWS Cost Anomaly Detection with noise control. The module creates monitors and o
 
 ```hcl
 module "anomaly_detection" {
-  source = "<owner>/finops-baseline/aws//modules/anomaly-detection"
+  source = "mikmorley/finops-baseline/aws//modules/anomaly-detection"
 
   name_prefix   = "finops"
   sns_topic_arn = module.notifications.topic_arn
@@ -67,7 +67,7 @@ The module has no provider block and does not set the per-resource `region` argu
 
 ```hcl
 module "anomaly_detection" {
-  source    = "<owner>/finops-baseline/aws//modules/anomaly-detection"
+  source    = "mikmorley/finops-baseline/aws//modules/anomaly-detection"
   providers = { aws = aws.us_east_1 }
   # ...
 }
