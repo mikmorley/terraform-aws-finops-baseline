@@ -71,7 +71,7 @@ A resource type you leave out of `resource_types` gets no permissions at all.
 
 ## Stopping from a budget
 
-Set `budget_stop_topic_arn` to an SNS topic and the Lambda subscribes to it. Any message on that topic runs a stop. Point a budget notification at the topic and the tagged resources stop when the budget passes its threshold.
+Set `budget_stop_topic_arn` to an SNS topic and the Lambda subscribes to it. Any message on that topic runs a stop. The budgets module creates such a topic for its `stop_tagged` actions. Pass its `stop_topic_arn` output here, and the tagged resources stop when the budget passes the action's threshold.
 
 There is no approval step on this path. The Lambda stops everything with the tag as soon as the message arrives. Budget alerts run hours behind real spend, so this is a brake and not a hard limit. `dry_run` applies to this path too.
 
