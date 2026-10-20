@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/mikmorley/terraform-aws-finops-baseline/compare/v0.1.0...v0.2.0) (2026-10-20)
+
+
+### Features
+
+* **budgets:** add budgets submodule with account, tag and service budgets (M2) ([#4](https://github.com/mikmorley/terraform-aws-finops-baseline/issues/4)) ([094c93e](https://github.com/mikmorley/terraform-aws-finops-baseline/commit/094c93e157c930858e777c17ce421299872b5fd3))
+
 ## 0.1.0 (2026-10-20)
 
 
