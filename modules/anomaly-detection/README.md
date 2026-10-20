@@ -4,7 +4,7 @@ AWS Cost Anomaly Detection with noise control. The module creates monitors and o
 
 ```hcl
 module "anomaly_detection" {
-  source = "<owner>/finops-baseline/aws//modules/anomaly-detection"
+  source = "mikmorley/finops-baseline/aws//modules/anomaly-detection"
 
   name_prefix   = "finops"
   sns_topic_arn = module.notifications.topic_arn
@@ -67,7 +67,7 @@ The module has no provider block and does not set the per-resource `region` argu
 
 ```hcl
 module "anomaly_detection" {
-  source    = "<owner>/finops-baseline/aws//modules/anomaly-detection"
+  source    = "mikmorley/finops-baseline/aws//modules/anomaly-detection"
   providers = { aws = aws.us_east_1 }
   # ...
 }
@@ -128,3 +128,5 @@ No modules.
 | <a name="output_subscription_arn"></a> [subscription\_arn](#output\_subscription\_arn) | ARN of the anomaly subscription that publishes to the SNS topic. |
 | <a name="output_tag_monitor_arns"></a> [tag\_monitor\_arns](#output\_tag\_monitor\_arns) | ARNs of the tag monitors, keyed by the keys of `tag_monitors`. |
 <!-- END_TF_DOCS -->
+
+Part of [terraform-aws-finops-baseline](https://github.com/mikmorley/terraform-aws-finops-baseline) by [Michael Morley](https://morley.cloud).

@@ -4,7 +4,7 @@ A weekly AWS cost report. A Lambda reads Cost Explorer once a week and publishes
 
 ```hcl
 module "cost_report" {
-  source = "<owner>/finops-baseline/aws//modules/cost-report"
+  source = "mikmorley/finops-baseline/aws//modules/cost-report"
 
   name_prefix   = "finops"
   sns_topic_arn = module.notifications.topic_arn
@@ -76,7 +76,7 @@ The Lambda always calls Cost Explorer and Budgets through their `us-east-1` endp
 
 ```hcl
 module "cost_report" {
-  source    = "<owner>/finops-baseline/aws//modules/cost-report"
+  source    = "mikmorley/finops-baseline/aws//modules/cost-report"
   providers = { aws = aws.sydney }
   # ...
 }
@@ -150,3 +150,5 @@ No modules.
 | <a name="output_log_group_name"></a> [log\_group\_name](#output\_log\_group\_name) | Name of the CloudWatch log group of the cost report Lambda. |
 | <a name="output_schedule_name"></a> [schedule\_name](#output\_schedule\_name) | Name of the EventBridge schedule that runs the report. |
 <!-- END_TF_DOCS -->
+
+Part of [terraform-aws-finops-baseline](https://github.com/mikmorley/terraform-aws-finops-baseline) by [Michael Morley](https://morley.cloud).

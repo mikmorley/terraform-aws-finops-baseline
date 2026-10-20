@@ -4,7 +4,7 @@ Activates your tag keys as cost allocation tags. Tag budgets and tag-based anoma
 
 ```hcl
 module "cost_allocation_tags" {
-  source = "<owner>/finops-baseline/aws//modules/cost-allocation-tags"
+  source = "mikmorley/finops-baseline/aws//modules/cost-allocation-tags"
 
   tag_keys = ["Environment", "Project"]
 }
@@ -34,7 +34,7 @@ The module has no provider block and does not set the per-resource `region` argu
 
 ```hcl
 module "cost_allocation_tags" {
-  source    = "<owner>/finops-baseline/aws//modules/cost-allocation-tags"
+  source    = "mikmorley/finops-baseline/aws//modules/cost-allocation-tags"
   providers = { aws = aws.us_east_1 }
   # ...
 }
@@ -81,3 +81,5 @@ No modules.
 | ---- | ----------- |
 | <a name="output_active_tag_keys"></a> [active\_tag\_keys](#output\_active\_tag\_keys) | Tag keys this module activates as cost allocation tags. |
 <!-- END_TF_DOCS -->
+
+Part of [terraform-aws-finops-baseline](https://github.com/mikmorley/terraform-aws-finops-baseline) by [Michael Morley](https://morley.cloud).

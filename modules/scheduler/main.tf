@@ -234,17 +234,24 @@ resource "aws_scheduler_schedule" "this" {
 # --- Budget stop path -----------------------------------------------------------
 
 resource "aws_lambda_permission" "budget_stop" {
-  count = var.budget_stop_topic_arn == null ? 0 : 1
+  count = var.budget_stop_enabled ? 1 : 0
 
   statement_id  = "AllowInvokeFromBudgetStopTopic"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.scheduler.function_name
   principal     = "sns.amazonaws.com"
   source_arn    = var.budget_stop_topic_arn
+
+  lifecycle {
+    precondition {
+      condition     = var.budget_stop_topic_arn != null
+      error_message = "budget_stop_enabled needs budget_stop_topic_arn."
+    }
+  }
 }
 
 resource "aws_sns_topic_subscription" "budget_stop" {
-  count = var.budget_stop_topic_arn == null ? 0 : 1
+  count = var.budget_stop_enabled ? 1 : 0
 
   topic_arn = var.budget_stop_topic_arn
   protocol  = "lambda"
