@@ -24,6 +24,12 @@ jobs:
           # The wrapper is a Node script run with the first `node` on PATH. The self-hosted
           # runner's system Node is too old for it, and nothing here reads its outputs.
           terraform_wrapper: false
+      # Without a cache every `terraform init` downloads its own copy of the AWS provider
+      # (several hundred MB). Ten directories filled the self-hosted runner's disk.
+      - name: Share one provider download between directories
+        run: |
+          mkdir -p "$RUNNER_TEMP/tf-plugin-cache"
+          echo "TF_PLUGIN_CACHE_DIR=$RUNNER_TEMP/tf-plugin-cache" >> "$GITHUB_ENV"
       - name: Format
         run: terraform fmt -check -recursive
       - name: Init and validate (root, modules, examples)
