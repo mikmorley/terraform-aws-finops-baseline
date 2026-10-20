@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.8.0](https://github.com/mikmorley/terraform-aws-finops-baseline/compare/v0.7.0...v0.8.0) (2026-10-20)
+
+
+### Features
+
+* wire the submodules into the root module and add examples and docs (M8) ([#17](https://github.com/mikmorley/terraform-aws-finops-baseline/issues/17)) ([12241b1](https://github.com/mikmorley/terraform-aws-finops-baseline/commit/12241b1003b4b8a456333eb018e7a0ace8a21490))
+
 ## [0.7.0](https://github.com/mikmorley/terraform-aws-finops-baseline/compare/v0.6.0...v0.7.0) (2026-10-20)
 
 
