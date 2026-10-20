@@ -21,5 +21,6 @@ settings:
   anchor: true
   default: true
   description: true
+  lockfile: false
   required: true
   type: true
