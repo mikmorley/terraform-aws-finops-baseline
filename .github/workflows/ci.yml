@@ -1,0 +1,89 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: "1.7.5" # oldest supported; module claims >= 1.7
+      - name: Format
+        run: terraform fmt -check -recursive
+      - name: Init and validate (root, modules, examples)
+        run: scripts/validate-all.sh
+      - uses: terraform-linters/setup-tflint@v6
+      - name: TFLint
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          tflint --init
+          tflint --recursive
+      - name: Terraform tests
+        run: |
+          terraform init -backend=false -input=false
+          terraform test
+
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+      - name: Install dev dependencies
+        run: pip install pytest "moto[ssm,sns,ec2,rds,ce]" boto3 ruff
+      - name: Ruff lint
+        run: ruff check .
+      - name: Ruff format
+        run: ruff format --check .
+      - name: Pytest
+        # Exit code 5 means "no tests collected". Allowed until the first Lambda
+        # lands in M1, then this should become a plain `pytest`.
+        run: pytest || [ $? -eq 5 ]
+
+  checkov:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+      - name: Install checkov
+        run: pip install checkov
+      - name: Checkov
+        # Skips are documented inline next to the resource with a reason.
+        run: checkov -d . --framework terraform --quiet --compact
+
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      # The terraform-docs/gh-actions image bundles an older terraform-docs whose
+      # table layout differs from local runs, so install a pinned version instead.
+      - name: Install terraform-docs
+        env:
+          TERRAFORM_DOCS_VERSION: v0.24.0
+        run: |
+          curl -sSfLo terraform-docs.tar.gz \
+            "https://github.com/terraform-docs/terraform-docs/releases/download/${TERRAFORM_DOCS_VERSION}/terraform-docs-${TERRAFORM_DOCS_VERSION}-linux-amd64.tar.gz"
+          tar -xzf terraform-docs.tar.gz terraform-docs
+          sudo mv terraform-docs /usr/local/bin/
+          rm terraform-docs.tar.gz
+      - name: terraform-docs drift check
+        run: |
+          terraform-docs --config .terraform-docs.yml .
+          git status --porcelain
+          test -z "$(git status --porcelain)" || { echo "::error::READMEs are out of date, run terraform-docs"; exit 1; }

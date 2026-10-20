@@ -1,0 +1,39 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+
+# Lambda build artifacts (packaged by archive_file at plan/apply time)
+*.zip
+.build/
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Tooling
+.tflint.d/
+.checkov.baseline
+
+# Editors and OS
+.idea/
+.vscode/
+.DS_Store
+
+# Lock files are not committed for a reusable module
+.terraform.lock.hcl
