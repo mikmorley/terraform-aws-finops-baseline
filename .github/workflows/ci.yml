@@ -71,10 +71,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+      # The terraform-docs/gh-actions image bundles an older terraform-docs whose
+      # table layout differs from local runs, so install a pinned version instead.
+      - name: Install terraform-docs
+        env:
+          TERRAFORM_DOCS_VERSION: v0.24.0
+        run: |
+          curl -sSfLo terraform-docs.tar.gz \
+            "https://github.com/terraform-docs/terraform-docs/releases/download/${TERRAFORM_DOCS_VERSION}/terraform-docs-${TERRAFORM_DOCS_VERSION}-linux-amd64.tar.gz"
+          tar -xzf terraform-docs.tar.gz terraform-docs
+          sudo mv terraform-docs /usr/local/bin/
+          rm terraform-docs.tar.gz
       - name: terraform-docs drift check
-        uses: terraform-docs/gh-actions@v1
-        with:
-          working-dir: .
-          config-file: .terraform-docs.yml
-          output-method: inject
-          fail-on-diff: true
+        run: |
+          terraform-docs --config .terraform-docs.yml .
+          git status --porcelain
+          test -z "$(git status --porcelain)" || { echo "::error::READMEs are out of date, run terraform-docs"; exit 1; }
