@@ -12,10 +12,10 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
-# Runners are pinned to ubuntu-24.04 so the ubuntu-latest move to Ubuntu 26 does not change CI.
+# Jobs run on the self-hosted runner (Linux, X64). It has to have curl and tar.
 jobs:
   terraform:
-    runs-on: ubuntu-24.04
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v7
       - uses: hashicorp/setup-terraform@v4
@@ -38,7 +38,7 @@ jobs:
           terraform test
 
   python:
-    runs-on: ubuntu-24.04
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
@@ -54,7 +54,7 @@ jobs:
         run: pytest
 
   checkov:
-    runs-on: ubuntu-24.04
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
@@ -67,7 +67,7 @@ jobs:
         run: checkov -d . --framework terraform --quiet --compact
 
   docs:
-    runs-on: ubuntu-24.04
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v7
       # The terraform-docs/gh-actions image bundles an older terraform-docs whose
@@ -79,7 +79,10 @@ jobs:
           curl -sSfLo terraform-docs.tar.gz \
             "https://github.com/terraform-docs/terraform-docs/releases/download/${TERRAFORM_DOCS_VERSION}/terraform-docs-${TERRAFORM_DOCS_VERSION}-linux-amd64.tar.gz"
           tar -xzf terraform-docs.tar.gz terraform-docs
-          sudo mv terraform-docs /usr/local/bin/
+          # A user directory on PATH, so the job needs no sudo on a self-hosted runner.
+          mkdir -p "$RUNNER_TEMP/bin"
+          mv terraform-docs "$RUNNER_TEMP/bin/"
+          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
           rm terraform-docs.tar.gz
       - name: terraform-docs drift check
         run: |
